@@ -9,7 +9,7 @@ export default function Home() {
 
       <p className="font-bold text-4xl">Pokemon Showdown</p>
       </div>
-        <section className="w-full mt-8">
+        <section className="w-full mt-8 bg-gray-100 text-black rounded-lg p-6">
           <GameFetcher />
         </section>
       </main>

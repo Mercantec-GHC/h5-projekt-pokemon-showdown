@@ -1,0 +1,6 @@
+@PokemonShowdown.Api_HostAddress = http://localhost:5108
+
+GET {{PokemonShowdown.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

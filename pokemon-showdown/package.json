@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate:pokemon-details": "node scripts/generate-pokemon-details.mjs",
+    "dev:api": "dotnet run --project csharp-api/PokemonShowdown.Api.csproj"
   },
   "dependencies": {
     "next": "16.2.0",
