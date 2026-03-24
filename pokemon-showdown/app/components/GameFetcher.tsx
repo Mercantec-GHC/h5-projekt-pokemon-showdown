@@ -10,6 +10,15 @@ type Move = {
   damage_class: 'physical' | 'special' | 'status' | null
   power: number | null
   type: string | null
+<<<<<<< Updated upstream
+=======
+  accuracy?: number | null
+  priority?: number | null
+  target?: string | null
+  secondary_chance?: number | null
+  stat_changes?: { stat: string; stages: number }[] | null
+  status?: { name: string; chance: number } | null
+>>>>>>> Stashed changes
 }
 
 type BattlePokemon = {
@@ -18,6 +27,15 @@ type BattlePokemon = {
   currentHp: number
   maxHp: number
   fainted: boolean
+<<<<<<< Updated upstream
+=======
+  status?: string | null
+  attackStage?: number
+  defenseStage?: number
+  specialAttackStage?: number
+  specialDefenseStage?: number
+  speedStage?: number
+>>>>>>> Stashed changes
   sprites?: {
     front_default?: string | null
     back_default?: string | null
@@ -209,6 +227,7 @@ export default function GameFetcher() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-3 rounded border bg-white dark:bg-gray-900">
+<<<<<<< Updated upstream
               <div className="font-semibold mb-1">Player Active</div>
               <div className="capitalize">{activePlayer?.name ?? 'None'}</div>
               <div className="text-sm">HP: {activePlayer?.currentHp ?? 0}/{activePlayer?.maxHp ?? 0}</div>
@@ -216,11 +235,43 @@ export default function GameFetcher() {
                 <img src={activePlayer.sprites.front_default} alt={activePlayer.name} className="w-20 h-20 mt-2" />
               ) : null}
             </div>
+=======
+                <div className="font-semibold mb-1">Player Active</div>
+                <div className="capitalize">{activePlayer?.name ?? 'None'}</div>
+                <div className="text-sm">HP: {activePlayer?.currentHp ?? 0}/{activePlayer?.maxHp ?? 0}</div>
+                {activePlayer?.status ? (
+                  <div className="text-xs mt-1">Status: <span className="font-medium">{activePlayer.status}</span></div>
+                ) : null}
+                <div className="text-xs mt-1">
+                  {activePlayer ? (
+                    <span>
+                      Atk:{activePlayer.attackStage ?? 0} Def:{activePlayer.defenseStage ?? 0} SpA:{activePlayer.specialAttackStage ?? 0} SpD:{activePlayer.specialDefenseStage ?? 0} Spe:{activePlayer.speedStage ?? 0}
+                    </span>
+                  ) : null}
+                </div>
+                {activePlayer?.sprites?.front_default ? (
+                  <img src={activePlayer.sprites.front_default} alt={activePlayer.name} className="w-20 h-20 mt-2" />
+                ) : null}
+              </div>
+>>>>>>> Stashed changes
 
             <div className="p-3 rounded border bg-white dark:bg-gray-900">
               <div className="font-semibold mb-1">Bot Active</div>
               <div className="capitalize">{activeBot?.name ?? 'None'}</div>
               <div className="text-sm">HP: {activeBot?.currentHp ?? 0}/{activeBot?.maxHp ?? 0}</div>
+<<<<<<< Updated upstream
+=======
+              {activeBot?.status ? (
+                <div className="text-xs mt-1">Status: <span className="font-medium">{activeBot.status}</span></div>
+              ) : null}
+              <div className="text-xs mt-1">
+                {activeBot ? (
+                  <span>
+                    Atk:{activeBot.attackStage ?? 0} Def:{activeBot.defenseStage ?? 0} SpA:{activeBot.specialAttackStage ?? 0} SpD:{activeBot.specialDefenseStage ?? 0} Spe:{activeBot.speedStage ?? 0}
+                  </span>
+                ) : null}
+              </div>
+>>>>>>> Stashed changes
               {activeBot?.sprites?.front_default ? (
                 <img src={activeBot.sprites.front_default} alt={activeBot.name} className="w-20 h-20 mt-2" />
               ) : null}

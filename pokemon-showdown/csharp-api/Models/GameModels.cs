@@ -16,6 +16,27 @@ public sealed class Move
     [JsonPropertyName("power")]
     public int? Power { get; set; }
 
+<<<<<<< Updated upstream
+=======
+    [JsonPropertyName("accuracy")]
+    public int? Accuracy { get; set; }
+
+    [JsonPropertyName("priority")]
+    public int? Priority { get; set; }
+
+    [JsonPropertyName("target")]
+    public string? Target { get; set; }
+
+    [JsonPropertyName("secondary_chance")]
+    public int? SecondaryChance { get; set; }
+
+    [JsonPropertyName("stat_changes")]
+    public List<StatChange>? StatChanges { get; set; }
+
+    [JsonPropertyName("status")]
+    public StatusEffect? Status { get; set; }
+
+>>>>>>> Stashed changes
     [JsonPropertyName("type")]
     public string? Type { get; set; }
 
@@ -23,6 +44,27 @@ public sealed class Move
     public bool? Fallback { get; set; }
 }
 
+<<<<<<< Updated upstream
+=======
+public sealed class StatChange
+{
+    [JsonPropertyName("stat")]
+    public string Stat { get; set; } = string.Empty;
+
+    [JsonPropertyName("stages")]
+    public int Stages { get; set; }
+}
+
+public sealed class StatusEffect
+{
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
+
+    [JsonPropertyName("chance")]
+    public int Chance { get; set; }
+}
+
+>>>>>>> Stashed changes
 public sealed class SpriteSet
 {
     [JsonPropertyName("front_default")]
@@ -123,6 +165,27 @@ public sealed class BattlePokemon
 
     [JsonPropertyName("fainted")]
     public bool Fainted { get; set; }
+<<<<<<< Updated upstream
+=======
+
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    [JsonPropertyName("attackStage")]
+    public int AttackStage { get; set; }
+
+    [JsonPropertyName("defenseStage")]
+    public int DefenseStage { get; set; }
+
+    [JsonPropertyName("specialAttackStage")]
+    public int SpecialAttackStage { get; set; }
+
+    [JsonPropertyName("specialDefenseStage")]
+    public int SpecialDefenseStage { get; set; }
+
+    [JsonPropertyName("speedStage")]
+    public int SpeedStage { get; set; }
+>>>>>>> Stashed changes
 }
 
 public sealed class BattleSide
@@ -156,6 +219,12 @@ public sealed class BattleState
 
     [JsonPropertyName("log")]
     public List<string> Log { get; set; } = [];
+<<<<<<< Updated upstream
+=======
+
+    [JsonPropertyName("playerMustSwitch")]
+    public bool PlayerMustSwitch { get; set; }
+>>>>>>> Stashed changes
 }
 
 public sealed class StartBattleRequest

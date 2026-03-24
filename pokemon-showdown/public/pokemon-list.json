@@ -4232,6 +4232,7 @@
       "url": "https://pokeapi.co/api/v2/pokemon/10032/"
     },
     {
+<<<<<<< Updated upstream
       "name": "venusaur-mega",
       "url": "https://pokeapi.co/api/v2/pokemon/10033/"
     },
@@ -4464,6 +4465,8 @@
       "url": "https://pokeapi.co/api/v2/pokemon/10090/"
     },
     {
+=======
+>>>>>>> Stashed changes
       "name": "rattata-alola",
       "url": "https://pokeapi.co/api/v2/pokemon/10091/"
     },
@@ -4472,10 +4475,13 @@
       "url": "https://pokeapi.co/api/v2/pokemon/10092/"
     },
     {
+<<<<<<< Updated upstream
       "name": "raticate-totem-alola",
       "url": "https://pokeapi.co/api/v2/pokemon/10093/"
     },
     {
+=======
+>>>>>>> Stashed changes
       "name": "pikachu-original-cap",
       "url": "https://pokeapi.co/api/v2/pokemon/10094/"
     },
@@ -4584,6 +4590,7 @@
       "url": "https://pokeapi.co/api/v2/pokemon/10120/"
     },
     {
+<<<<<<< Updated upstream
       "name": "gumshoos-totem",
       "url": "https://pokeapi.co/api/v2/pokemon/10121/"
     },
@@ -4592,6 +4599,8 @@
       "url": "https://pokeapi.co/api/v2/pokemon/10122/"
     },
     {
+=======
+>>>>>>> Stashed changes
       "name": "oricorio-pom-pom",
       "url": "https://pokeapi.co/api/v2/pokemon/10123/"
     },
@@ -4612,6 +4621,7 @@
       "url": "https://pokeapi.co/api/v2/pokemon/10127/"
     },
     {
+<<<<<<< Updated upstream
       "name": "lurantis-totem",
       "url": "https://pokeapi.co/api/v2/pokemon/10128/"
     },
@@ -4620,6 +4630,8 @@
       "url": "https://pokeapi.co/api/v2/pokemon/10129/"
     },
     {
+=======
+>>>>>>> Stashed changes
       "name": "minior-orange-meteor",
       "url": "https://pokeapi.co/api/v2/pokemon/10130/"
     },
@@ -4676,6 +4688,7 @@
       "url": "https://pokeapi.co/api/v2/pokemon/10143/"
     },
     {
+<<<<<<< Updated upstream
       "name": "mimikyu-totem-disguised",
       "url": "https://pokeapi.co/api/v2/pokemon/10144/"
     },
@@ -4688,6 +4701,8 @@
       "url": "https://pokeapi.co/api/v2/pokemon/10146/"
     },
     {
+=======
+>>>>>>> Stashed changes
       "name": "magearna-original",
       "url": "https://pokeapi.co/api/v2/pokemon/10147/"
     },
@@ -4696,6 +4711,7 @@
       "url": "https://pokeapi.co/api/v2/pokemon/10148/"
     },
     {
+<<<<<<< Updated upstream
       "name": "marowak-totem",
       "url": "https://pokeapi.co/api/v2/pokemon/10149/"
     },
@@ -4704,6 +4720,8 @@
       "url": "https://pokeapi.co/api/v2/pokemon/10150/"
     },
     {
+=======
+>>>>>>> Stashed changes
       "name": "rockruff-own-tempo",
       "url": "https://pokeapi.co/api/v2/pokemon/10151/"
     },
@@ -4712,6 +4730,7 @@
       "url": "https://pokeapi.co/api/v2/pokemon/10152/"
     },
     {
+<<<<<<< Updated upstream
       "name": "araquanid-totem",
       "url": "https://pokeapi.co/api/v2/pokemon/10153/"
     },
@@ -4720,6 +4739,8 @@
       "url": "https://pokeapi.co/api/v2/pokemon/10154/"
     },
     {
+=======
+>>>>>>> Stashed changes
       "name": "necrozma-dusk",
       "url": "https://pokeapi.co/api/v2/pokemon/10155/"
     },
@@ -5172,6 +5193,7 @@
       "url": "https://pokeapi.co/api/v2/pokemon/10267/"
     },
     {
+<<<<<<< Updated upstream
       "name": "miraidon-low-power-mode",
       "url": "https://pokeapi.co/api/v2/pokemon/10268/"
     },
@@ -5188,6 +5210,8 @@
       "url": "https://pokeapi.co/api/v2/pokemon/10271/"
     },
     {
+=======
+>>>>>>> Stashed changes
       "name": "ursaluna-bloodmoon",
       "url": "https://pokeapi.co/api/v2/pokemon/10272/"
     },
@@ -5210,6 +5234,7 @@
     {
       "name": "terapagos-stellar",
       "url": "https://pokeapi.co/api/v2/pokemon/10277/"
+<<<<<<< Updated upstream
     },
     {
       "name": "clefable-mega",
@@ -5403,5 +5428,8 @@
       "name": "baxcalibur-mega",
       "url": "https://pokeapi.co/api/v2/pokemon/10325/"
     }
+=======
+    }    
+>>>>>>> Stashed changes
   ]
 }

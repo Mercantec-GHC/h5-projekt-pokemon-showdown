@@ -1,0 +1,68 @@
+[
+  {
+    "name": "Tackle",
+    "category": "physical",
+    "power": 40,
+    "accuracy": 100,
+    "priority": 0,
+    "target": "opponent",
+    "stat_changes": [],
+    "status": null,
+    "secondary_chance": 0
+  },
+  {
+    "name": "Scratch",
+    "category": "physical",
+    "power": 40,
+    "accuracy": 100,
+    "priority": 0,
+    "target": "opponent",
+    "stat_changes": [],
+    "status": null,
+    "secondary_chance": 0
+  },
+  {
+    "name": "Thunderbolt",
+    "category": "special",
+    "power": 90,
+    "accuracy": 100,
+    "priority": 0,
+    "target": "opponent",
+    "stat_changes": [],
+    "status": { "name": "par", "chance": 10 },
+    "secondary_chance": 10
+  },
+  {
+    "name": "Thunder Wave",
+    "category": "status",
+    "power": null,
+    "accuracy": 90,
+    "priority": 0,
+    "target": "opponent",
+    "stat_changes": [],
+    "status": { "name": "par", "chance": 100 },
+    "secondary_chance": 100
+  },
+  {
+    "name": "Swords Dance",
+    "category": "status",
+    "power": null,
+    "accuracy": null,
+    "priority": 0,
+    "target": "self",
+    "stat_changes": [{ "stat": "attack", "stages": 2 }],
+    "status": null,
+    "secondary_chance": 0
+  },
+  {
+    "name": "Growl",
+    "category": "status",
+    "power": null,
+    "accuracy": 100,
+    "priority": 0,
+    "target": "opponent",
+    "stat_changes": [{ "stat": "attack", "stages": -1 }],
+    "status": null,
+    "secondary_chance": 0
+  }
+]

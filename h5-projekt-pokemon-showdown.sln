@@ -1,0 +1,32 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pokemon-showdown", "pokemon-showdown", "{7C2F25C0-9570-84E4-7080-787BD81781CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "csharp-api", "csharp-api", "{DFD49E17-80E9-C48B-20EF-4B96223329F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonShowdown.Api", "pokemon-showdown\csharp-api\PokemonShowdown.Api.csproj", "{BAFC23B5-D1FD-6B78-D31A-B4E55B9C8174}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BAFC23B5-D1FD-6B78-D31A-B4E55B9C8174}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAFC23B5-D1FD-6B78-D31A-B4E55B9C8174}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAFC23B5-D1FD-6B78-D31A-B4E55B9C8174}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAFC23B5-D1FD-6B78-D31A-B4E55B9C8174}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DFD49E17-80E9-C48B-20EF-4B96223329F6} = {7C2F25C0-9570-84E4-7080-787BD81781CA}
+		{BAFC23B5-D1FD-6B78-D31A-B4E55B9C8174} = {DFD49E17-80E9-C48B-20EF-4B96223329F6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A3B0D031-D948-4B2E-BE18-00F82AB96DDD}
+	EndGlobalSection
+EndGlobal
