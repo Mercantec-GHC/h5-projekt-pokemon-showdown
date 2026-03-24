@@ -18,7 +18,7 @@ public sealed class MovesService
         {
             if (_cached is not null) return _cached;
 
-            var filePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "public", "moves.json"));
+            var filePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "public", "pokemon-details.json"));
             if (!File.Exists(filePath))
             {
                 _cached = new List<Move>();

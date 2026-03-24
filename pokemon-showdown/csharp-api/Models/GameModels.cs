@@ -7,64 +7,13 @@ public sealed class Move
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 
-    [JsonPropertyName("level")]
-    public int? Level { get; set; }
 
     [JsonPropertyName("damage_class")]
-    public string? DamageClass { get; set; }
-
-    [JsonPropertyName("power")]
-    public int? Power { get; set; }
-
-<<<<<<< Updated upstream
-=======
-    [JsonPropertyName("accuracy")]
-    public int? Accuracy { get; set; }
-
-    [JsonPropertyName("priority")]
-    public int? Priority { get; set; }
-
-    [JsonPropertyName("target")]
-    public string? Target { get; set; }
-
-    [JsonPropertyName("secondary_chance")]
-    public int? SecondaryChance { get; set; }
-
-    [JsonPropertyName("stat_changes")]
-    public List<StatChange>? StatChanges { get; set; }
-
-    [JsonPropertyName("status")]
-    public StatusEffect? Status { get; set; }
-
->>>>>>> Stashed changes
-    [JsonPropertyName("type")]
-    public string? Type { get; set; }
-
-    [JsonPropertyName("fallback")]
-    public bool? Fallback { get; set; }
+    public string DamageClass { get; set; } = string.Empty;
 }
 
-<<<<<<< Updated upstream
-=======
-public sealed class StatChange
-{
-    [JsonPropertyName("stat")]
-    public string Stat { get; set; } = string.Empty;
 
-    [JsonPropertyName("stages")]
-    public int Stages { get; set; }
-}
 
-public sealed class StatusEffect
-{
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = string.Empty;
-
-    [JsonPropertyName("chance")]
-    public int Chance { get; set; }
-}
-
->>>>>>> Stashed changes
 public sealed class SpriteSet
 {
     [JsonPropertyName("front_default")]
@@ -81,18 +30,6 @@ public sealed class PokemonStats
 
     [JsonPropertyName("attack")]
     public int Attack { get; set; }
-
-    [JsonPropertyName("defense")]
-    public int Defense { get; set; }
-
-    [JsonPropertyName("special_attack")]
-    public int SpecialAttack { get; set; }
-
-    [JsonPropertyName("special_defense")]
-    public int SpecialDefense { get; set; }
-
-    [JsonPropertyName("speed")]
-    public int Speed { get; set; }
 }
 
 public sealed class PokemonDetailsEntry
@@ -115,11 +52,6 @@ public sealed class PokemonDetailsEntry
     [JsonPropertyName("level_up_damaging_moves")]
     public List<Move> LevelUpDamagingMoves { get; set; } = [];
 
-    [JsonPropertyName("level_up_status_moves")]
-    public List<Move> LevelUpStatusMoves { get; set; } = [];
-
-    [JsonPropertyName("fallback_attacks")]
-    public List<Move> FallbackAttacks { get; set; } = [];
 }
 
 public sealed class PokemonDetailsFile
@@ -165,27 +97,8 @@ public sealed class BattlePokemon
 
     [JsonPropertyName("fainted")]
     public bool Fainted { get; set; }
-<<<<<<< Updated upstream
-=======
 
-    [JsonPropertyName("status")]
-    public string? Status { get; set; }
 
-    [JsonPropertyName("attackStage")]
-    public int AttackStage { get; set; }
-
-    [JsonPropertyName("defenseStage")]
-    public int DefenseStage { get; set; }
-
-    [JsonPropertyName("specialAttackStage")]
-    public int SpecialAttackStage { get; set; }
-
-    [JsonPropertyName("specialDefenseStage")]
-    public int SpecialDefenseStage { get; set; }
-
-    [JsonPropertyName("speedStage")]
-    public int SpeedStage { get; set; }
->>>>>>> Stashed changes
 }
 
 public sealed class BattleSide
@@ -219,12 +132,9 @@ public sealed class BattleState
 
     [JsonPropertyName("log")]
     public List<string> Log { get; set; } = [];
-<<<<<<< Updated upstream
-=======
 
     [JsonPropertyName("playerMustSwitch")]
     public bool PlayerMustSwitch { get; set; }
->>>>>>> Stashed changes
 }
 
 public sealed class StartBattleRequest

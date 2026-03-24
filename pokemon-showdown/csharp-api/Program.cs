@@ -8,10 +8,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddSingleton<PokemonDataService>();
 builder.Services.AddSingleton<BattleStore>();
-<<<<<<< Updated upstream
-=======
 builder.Services.AddSingleton<MovesService>();
->>>>>>> Stashed changes
 builder.Services.AddSingleton<BattleEngine>();
 
 builder.Services.AddCors(options =>
