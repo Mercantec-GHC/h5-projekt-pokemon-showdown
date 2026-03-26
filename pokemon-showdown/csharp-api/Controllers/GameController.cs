@@ -11,12 +11,14 @@ public sealed class GameController : ControllerBase
     private readonly PokemonDataService _data;
     private readonly BattleStore _store;
     private readonly BattleEngine _engine;
+    private readonly MqttService _mqtt;
 
-    public GameController(PokemonDataService data, BattleStore store, BattleEngine engine)
+    public GameController(PokemonDataService data, BattleStore store, BattleEngine engine, MqttService mqtt)
     {
         _data = data;
         _store = store;
         _engine = engine;
+        _mqtt = mqtt;
     }
 
     [HttpPost("start")]
@@ -28,6 +30,12 @@ public sealed class GameController : ControllerBase
         var state = _engine.CreateBattle(details, body.TeamSize, body.MovesPerPokemon);
         _store.Create(state);
 
+        await _mqtt.PublishAsync($"Battle started: {state.BattleId}");
+        foreach (var log in state.Log)
+        {
+            await _mqtt.PublishAsync(log);
+        }
+
         return Ok(new StartBattleResponse
         {
             BattleId = state.BattleId,
@@ -36,7 +44,7 @@ public sealed class GameController : ControllerBase
     }
 
     [HttpPost("turn")]
-    public ActionResult<ResolveTurnResponse> Turn([FromBody] TurnRequest request)
+    public async Task<ActionResult<ResolveTurnResponse>> Turn([FromBody] TurnRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.BattleId))
         {
@@ -66,6 +74,11 @@ public sealed class GameController : ControllerBase
 
         var result = _engine.ResolveTurn(state, request);
         _store.Update(result.State);
+
+        foreach (var evt in result.Events)
+        {
+            await _mqtt.PublishAsync(evt);
+        }
 
         return Ok(result);
     }

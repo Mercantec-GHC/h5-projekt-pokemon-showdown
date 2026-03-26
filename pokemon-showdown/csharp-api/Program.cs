@@ -8,8 +8,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddSingleton<PokemonDataService>();
 builder.Services.AddSingleton<BattleStore>();
-builder.Services.AddSingleton<MovesService>();
 builder.Services.AddSingleton<BattleEngine>();
+builder.Services.AddSingleton<MqttService>();
 
 builder.Services.AddCors(options =>
 {
