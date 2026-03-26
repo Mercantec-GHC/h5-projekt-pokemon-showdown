@@ -18,9 +18,6 @@ public sealed class SpriteSet
 {
     [JsonPropertyName("front_default")]
     public string? FrontDefault { get; set; }
-
-    [JsonPropertyName("back_default")]
-    public string? BackDefault { get; set; }
 }
 
 public sealed class PokemonStats
@@ -29,7 +26,7 @@ public sealed class PokemonStats
     public int Hp { get; set; }
 
     [JsonPropertyName("attack")]
-    public int Attack { get; set; }
+    public int Attack { get; set; } = 20;
 }
 
 public sealed class PokemonDetailsEntry
@@ -161,6 +158,15 @@ public sealed class TurnRequest
     public int? SwitchIndex { get; set; }
 }
 
+public class BattleResponse
+{
+    [JsonPropertyName("state")]
+    public BattleState State { get; set; } = new();
+
+    [JsonPropertyName("events")]
+    public List<string> Events { get; set; } = [];
+}
+
 public sealed class StartBattleResponse
 {
     [JsonPropertyName("battleId")]
@@ -170,17 +176,6 @@ public sealed class StartBattleResponse
     public BattleState State { get; set; } = new();
 }
 
-public sealed class ResolveTurnResponse
-{
-    [JsonPropertyName("state")]
-    public BattleState State { get; set; } = new();
+public sealed class ResolveTurnResponse : BattleResponse { }
 
-    [JsonPropertyName("events")]
-    public List<string> Events { get; set; } = [];
-}
-
-public sealed class StateResponse
-{
-    [JsonPropertyName("state")]
-    public BattleState State { get; set; } = new();
-}
+public sealed class StateResponse : BattleResponse { }
