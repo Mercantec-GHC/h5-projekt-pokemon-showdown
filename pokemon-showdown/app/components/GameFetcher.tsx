@@ -224,16 +224,6 @@ export default function GameFetcher() {
                 <div className="font-semibold mb-1">Player Active</div>
                 <div className="capitalize">{activePlayer?.name ?? 'None'}</div>
                 <div className="text-sm">HP: {activePlayer?.currentHp ?? 0}/{activePlayer?.maxHp ?? 0}</div>
-                {activePlayer?.status ? (
-                  <div className="text-xs mt-1">Status: <span className="font-medium">{activePlayer.status}</span></div>
-                ) : null}
-                <div className="text-xs mt-1">
-                  {activePlayer ? (
-                    <span>
-                      Atk:{activePlayer.attackStage ?? 0} Def:{activePlayer.defenseStage ?? 0} SpA:{activePlayer.specialAttackStage ?? 0} SpD:{activePlayer.specialDefenseStage ?? 0} Spe:{activePlayer.speedStage ?? 0}
-                    </span>
-                  ) : null}
-                </div>
                 {activePlayer?.sprites?.front_default ? (
                   <img src={activePlayer.sprites.front_default} alt={activePlayer.name} className="w-20 h-20 mt-2" />
                 ) : null}
@@ -243,16 +233,6 @@ export default function GameFetcher() {
               <div className="font-semibold mb-1">Bot Active</div>
               <div className="capitalize">{activeBot?.name ?? 'None'}</div>
               <div className="text-sm">HP: {activeBot?.currentHp ?? 0}/{activeBot?.maxHp ?? 0}</div>
-              {activeBot?.status ? (
-                <div className="text-xs mt-1">Status: <span className="font-medium">{activeBot.status}</span></div>
-              ) : null}
-              <div className="text-xs mt-1">
-                {activeBot ? (
-                  <span>
-                    Atk:{activeBot.attackStage ?? 0} Def:{activeBot.defenseStage ?? 0} SpA:{activeBot.specialAttackStage ?? 0} SpD:{activeBot.specialDefenseStage ?? 0} Spe:{activeBot.speedStage ?? 0}
-                  </span>
-                ) : null}
-              </div>
               {activeBot?.sprites?.front_default ? (
                 <img src={activeBot.sprites.front_default} alt={activeBot.name} className="w-20 h-20 mt-2" />
               ) : null}
@@ -260,22 +240,21 @@ export default function GameFetcher() {
           </div>
 
           <div>
-            <label htmlFor="move-select" className="block mb-1 font-medium">
-              Choose move
-            </label>
-            <select
-              id="move-select"
-              className="w-full border rounded p-2"
-              value={selectedMove ?? ''}
-              onChange={(event) => setSelectedMove(event.target.value)}
-              disabled={!activePlayer || Boolean(battle.winner)}
-            >
-              {(activePlayer?.moveset ?? []).map((move) => (
-                <option key={move.name} value={move.name}>
-                  {move.name} ({move.damage_class ?? 'unknown'})
-                </option>
+            <label className="block mb-1 font-medium">Choose move</label>
+            <div className="grid grid-cols-2 gap-2">
+              {(activePlayer?.moveset ?? []).slice(0, 4).map((move) => (
+                <button
+                  key={move.name}
+                  type="button"
+                  className={`p-2 rounded border text-left ${selectedMove === move.name ? 'border-blue-600 bg-blue-50 dark:bg-blue-900' : 'border-gray-300 bg-white dark:bg-gray-800'} disabled:opacity-50`}
+                  onClick={() => setSelectedMove(move.name)}
+                  disabled={Boolean(battle.winner)}
+                >
+                  <span className="font-semibold capitalize">{move.name}</span>
+                  <span className="ml-2 text-xs text-gray-600 dark:text-gray-300">({move.damage_class ?? 'unknown'})</span>
+                </button>
               ))}
-            </select>
+            </div>
           </div>
 
           <div>
