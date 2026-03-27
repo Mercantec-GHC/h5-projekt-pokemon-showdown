@@ -100,5 +100,21 @@ public sealed class GameController : ControllerBase
         return Ok(new StateResponse { State = state });
     }
 
+    [HttpPost("input")]
+    public ActionResult<object> Input([FromBody] Dictionary<string, string>? data)
+    {
+        if (data?.TryGetValue("direction", out var direction) == true)
+        {
+            _mqtt.SetDirection(direction);
+            return Ok(new { direction, received = true });
+        }
+        return BadRequest(new { error = "direction required" });
+    }
 
+    [HttpGet("input/direction")]
+    public ActionResult<object> GetDirection()
+    {
+        var dir = _mqtt.GetDirection();
+        return Ok(new { direction = dir });
+    }
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const API = process.env.NEXT_PUBLIC_GAME_API_BASE ?? 'http://localhost:5108/game'
 
@@ -13,14 +13,39 @@ export default function GameFetcher() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [move, setMove] = useState<string | null>(null)
+  const [lastInput, setLastInput] = useState<string | null>(null)
 
   const p = battle?.player.team[battle.player.activeIndex]
   const b = battle?.bot.team[battle.bot.activeIndex]
+  const moves = p?.moveset || []
+  const moveIdx = moves.findIndex(m => m.name === move)
 
   const updateMove = (s: Battle) => {
     const a = s.player.team[s.player.activeIndex]
     if (!move || !a.moveset?.some(m => m.name === move)) setMove(a.moveset?.[0]?.name || null)
   }
+
+  const handleDirection = (dir: string) => {
+    if (!moves.length || battle?.winner) return
+    const idx = moveIdx === -1 ? 0 : moveIdx
+    if (dir === 'Up' || dir === 'Left') setMove(moves[(idx - 1 + moves.length) % moves.length].name)
+    else if (dir === 'Down' || dir === 'Right') setMove(moves[(idx + 1) % moves.length].name)
+    setLastInput(dir)
+    setTimeout(() => setLastInput(null), 500)
+  }
+
+  // Poll Arduino input via MQTT
+  useEffect(() => {
+    const timer = setInterval(async () => {
+      try {
+        const res = await fetch(`${API}/input/direction`)
+        const { direction } = await res.json()
+        if (direction) handleDirection(direction)
+      } catch (e) {}
+    }, 100)
+    return () => clearInterval(timer)
+  }, [moveIdx, moves])
+
 
   const call = async (url: string, body?: any) => {
     try {
@@ -55,6 +80,7 @@ export default function GameFetcher() {
         <button onClick={() => turn('move')} disabled={!move || !battle || loading || !!battle?.winner} className="px-4 py-2 bg-orange-600 text-white rounded disabled:opacity-50">Attack</button>
         <button onClick={() => turn('switch', battle?.player.team.findIndex((_, i) => i !== battle.player.activeIndex && !_.fainted))} disabled={!battle || loading || !!battle?.winner} className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50">Switch</button>
         <button onClick={() => { setBattle(null); setMove(null); setError('') }} className="px-3 py-2 border rounded">Clear</button>
+        {lastInput && <span className="px-2 py-2 text-sm bg-yellow-100 rounded">🎮 {lastInput}</span>}
       </div>
       {error && <div className="mb-4 text-red-600 text-sm">Error: {error}</div>}
       {battle ? (
@@ -62,10 +88,10 @@ export default function GameFetcher() {
           <div className="text-sm">Battle {battle.battleId} • Turn {battle.turn}{battle.winner && ` • Winner: ${battle.winner}`}</div>
           <div className="grid grid-cols-2 gap-4"><Card pk={p} /><Card pk={b} isBot /></div>
           <div>
-            <label className="block text-sm font-medium mb-1">Move</label>
+            <label className="block text-sm font-medium mb-1">Move (Use Arrow Keys or Arduino)</label>
             <div className="grid grid-cols-2 gap-2">
-              {p?.moveset?.map(m => (
-                <button key={m.name} onClick={() => setMove(m.name)} disabled={!!battle.winner} className={`p-2 rounded border text-left text-sm ${move === m.name ? 'border-blue-600 bg-blue-50 dark:bg-blue-900' : 'border-gray-300'} disabled:opacity-50`}>
+              {p?.moveset?.map((m, idx) => (
+                <button key={m.name} onClick={() => setMove(m.name)} disabled={!!battle.winner} className={`p-2 rounded border text-left text-sm transition ${move === m.name ? 'border-blue-600 bg-blue-50 dark:bg-blue-900 ring-2 ring-blue-400' : 'border-gray-300'} disabled:opacity-50`}>
                   <div className="font-semibold capitalize">{m.name}</div>
                   <div className="text-xs">({m.damage_class || '?'})</div>
                 </button>
