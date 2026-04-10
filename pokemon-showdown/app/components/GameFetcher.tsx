@@ -25,11 +25,69 @@ export default function GameFetcher() {
     if (!move || !a.moveset?.some(m => m.name === move)) setMove(a.moveset?.[0]?.name || null)
   }
 
+  // 2x2 grid navigation for moves
+  const [switchFocus, setSwitchFocus] = useState(false)
+  const [switchIdx, setSwitchIdx] = useState<number | null>(null)
   const handleDirection = (dir: string) => {
     if (!moves.length || battle?.winner) return
+    if (switchFocus && battle) {
+      // Team row navigation: always allow highlight over all 6 Pokémon, no restrictions
+      const team = battle.player.team
+      let idx = switchIdx ?? 0
+      if (dir === 'Left') {
+        setSwitchIdx(((idx - 1) + team.length) % team.length)
+      } else if (dir === 'Right') {
+        setSwitchIdx((idx + 1) % team.length)
+      } else if (dir === 'Up') {
+        setSwitchFocus(false)
+        setSwitchIdx(null)
+      } else if (dir === 'Down') {
+        // Only try to switch if not active and not fainted, but always allow highlight movement
+        if (idx !== battle.player.activeIndex && !team[idx].fainted) {
+          setSwitchFocus(false)
+          turn('switch', idx)
+          setSwitchIdx(null)
+        }
+      }
+      setLastInput(dir)
+      setTimeout(() => setLastInput(null), 500)
+      return
+    }
+    // 2x2 grid: idx 0 1 (top row), 2 3 (bottom row)
     const idx = moveIdx === -1 ? 0 : moveIdx
-    if (dir === 'Up' || dir === 'Left') setMove(moves[(idx - 1 + moves.length) % moves.length].name)
-    else if (dir === 'Down' || dir === 'Right') setMove(moves[(idx + 1) % moves.length].name)
+    let row = Math.floor(idx / 2)
+    let col = idx % 2
+    let newIdx = idx
+    if (dir === 'Up') {
+      if (row === 0) return // can't go up from top row
+      newIdx = (row - 1) * 2 + col
+    } else if (dir === 'Down') {
+      if (row === 1) {
+        // bottom row: go to team row
+        setSwitchFocus(true)
+        setLastInput(dir)
+        setTimeout(() => setLastInput(null), 500)
+        if (battle) {
+          const team = battle.player.team
+          // Find first enabled (not fainted, not active) or just 0 if all are disabled
+          let firstEnabled = team.findIndex((pk, i) => !pk.fainted && i !== battle.player.activeIndex)
+          if (firstEnabled === -1) firstEnabled = 0
+          setSwitchIdx(firstEnabled)
+        } else {
+          setSwitchIdx(0)
+        }
+        return
+      }
+      newIdx = (row + 1) * 2 + col
+      if (newIdx >= moves.length) newIdx = idx // stay if no move below
+    } else if (dir === 'Left') {
+      if (col === 0) return // can't go left from left col
+      newIdx = row * 2 + (col - 1)
+    } else if (dir === 'Right') {
+      if (col === 1 || row * 2 + (col + 1) >= moves.length) return // can't go right from right col or if no move
+      newIdx = row * 2 + (col + 1)
+    }
+    setMove(moves[newIdx].name)
     setLastInput(dir)
     setTimeout(() => setLastInput(null), 500)
   }
@@ -44,7 +102,7 @@ export default function GameFetcher() {
       } catch (e) {}
     }, 100)
     return () => clearInterval(timer)
-  }, [moveIdx, moves])
+  }, [moveIdx, moves, switchFocus, switchIdx])
 
 
   const call = async (url: string, body?: any) => {
@@ -78,7 +136,17 @@ export default function GameFetcher() {
       <div className="flex gap-2 mb-4">
         <button onClick={start} disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50">{loading && !battle ? 'Start...' : 'Start'}</button>
         <button onClick={() => turn('move')} disabled={!move || !battle || loading || !!battle?.winner} className="px-4 py-2 bg-orange-600 text-white rounded disabled:opacity-50">Attack</button>
-        <button onClick={() => turn('switch', battle?.player.team.findIndex((_, i) => i !== battle.player.activeIndex && !_.fainted))} disabled={!battle || loading || !!battle?.winner} className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50">Switch</button>
+        <button
+          onClick={() => {
+            setSwitchFocus(true)
+            // Start highlight at current switchIdx or 0, not just first enabled
+            setSwitchIdx(switchIdx !== null ? switchIdx : 0)
+          }}
+          disabled={!battle || loading || !!battle?.winner || switchFocus}
+          className={`px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50 ${switchFocus ? 'ring-2 ring-green-400' : ''}`}
+        >
+          Switch
+        </button>
         <button onClick={() => { setBattle(null); setMove(null); setError('') }} className="px-3 py-2 border rounded">Clear</button>
         {lastInput && <span className="px-2 py-2 text-sm bg-yellow-100 rounded">🎮 {lastInput}</span>}
       </div>
@@ -91,7 +159,12 @@ export default function GameFetcher() {
             <label className="block text-sm font-medium mb-1">Move (Use Arrow Keys or Arduino)</label>
             <div className="grid grid-cols-2 gap-2">
               {p?.moveset?.map((m, idx) => (
-                <button key={m.name} onClick={() => setMove(m.name)} disabled={!!battle.winner} className={`p-2 rounded border text-left text-sm transition ${move === m.name ? 'border-blue-600 bg-blue-50 dark:bg-blue-900 ring-2 ring-blue-400' : 'border-gray-300'} disabled:opacity-50`}>
+                <button
+                  key={m.name}
+                  onClick={() => setMove(m.name)}
+                  disabled={!!battle.winner}
+                  className={`p-2 rounded border text-left text-sm transition ${(!switchFocus && move === m.name) ? 'border-blue-600 bg-blue-50 dark:bg-blue-900 ring-2 ring-blue-400' : 'border-gray-300'} disabled:opacity-50`}
+                >
                   <div className="font-semibold capitalize">{m.name}</div>
                   <div className="text-xs">({m.damage_class || '?'})</div>
                 </button>
@@ -104,8 +177,19 @@ export default function GameFetcher() {
               {battle.player.team?.map((pk, i) => {
                 const isActive = i === battle.player.activeIndex
                 const disabled = isActive || pk.fainted || !!battle.winner || loading
+                const isSwitchSelected = switchFocus && switchIdx === i
                 return (
-                  <button key={`${pk.id}-${i}`} disabled={disabled} onClick={() => turn('switch', i)} className={`p-2 rounded border text-center text-xs ${isActive ? 'border-blue-500' : 'border-gray-300'} ${pk.fainted ? 'opacity-40 grayscale' : ''}`}>
+                  <button
+                    key={`${pk.id}-${i}`}
+                    disabled={disabled}
+                    onClick={() => {
+                      turn('switch', i)
+                      setSwitchFocus(false)
+                      setSwitchIdx(null)
+                    }}
+                    className={`p-2 rounded border text-center text-xs ${isActive ? 'border-blue-500' : 'border-gray-300'} ${pk.fainted ? 'opacity-40 grayscale' : ''} ${isSwitchSelected ? 'ring-2 ring-green-400' : ''}`}
+                    onMouseEnter={() => setSwitchIdx(i)}
+                  >
                     {pk.sprites?.front_default ? <img src={pk.sprites.front_default} alt={pk.name} className="w-12 h-12 mx-auto" /> : <div className="w-12 h-12 mx-auto rounded bg-gray-200" />}
                     <div className="truncate">{pk.name}</div>
                     <div className="text-[10px]">{pk.currentHp}/{pk.maxHp}</div>
