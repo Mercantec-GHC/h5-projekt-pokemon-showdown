@@ -1,3 +1,4 @@
+using PokemonShowdown.Api.Models;
 using MQTTnet;
 using MQTTnet.Client;
 using System.Text;
@@ -10,7 +11,7 @@ public class MqttService
 {
     private readonly IMqttClient _mqttClient;
     private bool _isConnected = false;
-    public string? LastDirection { get; private set; }
+    private Input? _lastInput;
 
     public MqttService()
     {
@@ -52,15 +53,16 @@ public class MqttService
 
                         if (e.ApplicationMessage.Topic == "game/input")
                         {
-                            
-                            if (payload.Contains("\"direction\""))
+                            var input = JsonSerializer.Deserialize<MqttInput>(payload);
+                            if (input.Type == "nav" && input.Direction != null)
                             {
-                                var direction = JsonSerializer.Deserialize<InputMessage>(payload);
-                                if (direction?.Direction != null)
-                                {
-                                    LastDirection = direction.Direction;
-                                    Console.WriteLine($"Input: {direction.Direction}");
-                                }
+                                _lastInput = new Input { Type = "direction", Value = input.Direction };
+                                Console.WriteLine($"Input: direction -> {input.Direction}");
+                            }
+                            else if (input.Type == "action" && input.Action != null)
+                            {
+                                _lastInput = new Input { Type = "action", Value = input.Action };
+                                Console.WriteLine($"Input: {input.Type} -> {input.Action}");
                             }
                         }
                     }
@@ -77,17 +79,11 @@ public class MqttService
         }
     }
 
-    public void SetDirection(string direction)
+    public Input? GetLastInput()
     {
-        LastDirection = direction;
-        Console.WriteLine($"Direction: {direction}");
-    }
-
-    public string? GetDirection()
-    {
-        var dir = LastDirection;
-        LastDirection = null;
-        return dir;
+        var input = _lastInput;
+        _lastInput = null;
+        return input;
     }
 
     public async Task PublishAsync(string message)
@@ -110,10 +106,6 @@ public class MqttService
     }
 }
 
-public class InputMessage
-{
-    [JsonPropertyName("direction")]
-    public string? Direction { get; set; }
-}
+
 
 

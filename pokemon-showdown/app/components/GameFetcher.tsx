@@ -25,13 +25,11 @@ export default function GameFetcher() {
     if (!move || !a.moveset?.some(m => m.name === move)) setMove(a.moveset?.[0]?.name || null)
   }
 
-  // 2x2 grid navigation for moves
   const [switchFocus, setSwitchFocus] = useState(false)
   const [switchIdx, setSwitchIdx] = useState<number | null>(null)
   const handleDirection = (dir: string) => {
     if (!moves.length || battle?.winner) return
     if (switchFocus && battle) {
-      // Team row navigation: always allow highlight over all 6 Pokémon, no restrictions
       const team = battle.player.team
       let idx = switchIdx ?? 0
       if (dir === 'Left') {
@@ -42,34 +40,27 @@ export default function GameFetcher() {
         setSwitchFocus(false)
         setSwitchIdx(null)
       } else if (dir === 'Down') {
-        // Only try to switch if not active and not fainted, but always allow highlight movement
-        if (idx !== battle.player.activeIndex && !team[idx].fainted) {
-          setSwitchFocus(false)
-          turn('switch', idx)
-          setSwitchIdx(null)
-        }
+        setSwitchFocus(false)
+        setSwitchIdx(null)
       }
       setLastInput(dir)
       setTimeout(() => setLastInput(null), 500)
       return
     }
-    // 2x2 grid: idx 0 1 (top row), 2 3 (bottom row)
     const idx = moveIdx === -1 ? 0 : moveIdx
     let row = Math.floor(idx / 2)
     let col = idx % 2
     let newIdx = idx
     if (dir === 'Up') {
-      if (row === 0) return // can't go up from top row
+      if (row === 0) return 
       newIdx = (row - 1) * 2 + col
     } else if (dir === 'Down') {
       if (row === 1) {
-        // bottom row: go to team row
         setSwitchFocus(true)
         setLastInput(dir)
         setTimeout(() => setLastInput(null), 500)
         if (battle) {
           const team = battle.player.team
-          // Find first enabled (not fainted, not active) or just 0 if all are disabled
           let firstEnabled = team.findIndex((pk, i) => !pk.fainted && i !== battle.player.activeIndex)
           if (firstEnabled === -1) firstEnabled = 0
           setSwitchIdx(firstEnabled)
@@ -79,12 +70,12 @@ export default function GameFetcher() {
         return
       }
       newIdx = (row + 1) * 2 + col
-      if (newIdx >= moves.length) newIdx = idx // stay if no move below
+      if (newIdx >= moves.length) newIdx = idx 
     } else if (dir === 'Left') {
-      if (col === 0) return // can't go left from left col
+      if (col === 0) return 
       newIdx = row * 2 + (col - 1)
     } else if (dir === 'Right') {
-      if (col === 1 || row * 2 + (col + 1) >= moves.length) return // can't go right from right col or if no move
+      if (col === 1 || row * 2 + (col + 1) >= moves.length) return 
       newIdx = row * 2 + (col + 1)
     }
     setMove(moves[newIdx].name)
@@ -92,17 +83,42 @@ export default function GameFetcher() {
     setTimeout(() => setLastInput(null), 500)
   }
 
+  const handleAction = (action: string) => {
+    if (action === 'select') {
+      if (switchFocus) {
+        if (switchIdx !== null && battle) {
+          const team = battle.player.team
+          if (switchIdx !== battle.player.activeIndex && !team[switchIdx].fainted) {
+            turn('switch', switchIdx)
+            setSwitchFocus(false)
+            setSwitchIdx(null)
+          }
+        }
+      } else {
+        if (move) {
+          turn('move')
+        }
+      }
+    }
+    setLastInput(action)
+    setTimeout(() => setLastInput(null), 500)
+  }
+
   // Poll Arduino input via MQTT
   useEffect(() => {
     const timer = setInterval(async () => {
       try {
-        const res = await fetch(`${API}/input/direction`)
-        const { direction } = await res.json()
-        if (direction) handleDirection(direction)
+        const res = await fetch(`${API}/input`)
+        const input = await res.json()
+        if (input.type === 'direction' && input.value) {
+          handleDirection(input.value)
+        } else if (input.type === 'action' && input.value) {
+          handleAction(input.value)
+        }
       } catch (e) {}
     }, 100)
     return () => clearInterval(timer)
-  }, [moveIdx, moves, switchFocus, switchIdx])
+  }, [moveIdx, moves, switchFocus, switchIdx]);
 
 
   const call = async (url: string, body?: any) => {
@@ -139,7 +155,6 @@ export default function GameFetcher() {
         <button
           onClick={() => {
             setSwitchFocus(true)
-            // Start highlight at current switchIdx or 0, not just first enabled
             setSwitchIdx(switchIdx !== null ? switchIdx : 0)
           }}
           disabled={!battle || loading || !!battle?.winner || switchFocus}
@@ -148,7 +163,7 @@ export default function GameFetcher() {
           Switch
         </button>
         <button onClick={() => { setBattle(null); setMove(null); setError('') }} className="px-3 py-2 border rounded">Clear</button>
-        {lastInput && <span className="px-2 py-2 text-sm bg-yellow-100 rounded">🎮 {lastInput}</span>}
+        
       </div>
       {error && <div className="mb-4 text-red-600 text-sm">Error: {error}</div>}
       {battle ? (

@@ -29,7 +29,6 @@ public sealed class BattleEngine
 
         BattlePokemon BuildBattlePokemon(PokemonDetailsEntry entry)
         {
-            // Only use damaging moves, always pick 4 (or as many as available)
             var pool = entry.LevelUpDamagingMoves ?? new List<Move>();
             var moveset = pool.OrderBy(_ => rng.Next()).Take(4)
                 .Select(m => new Move { Name = m.Name, DamageClass = m.DamageClass })
