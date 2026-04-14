@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 
-const API = process.env.NEXT_PUBLIC_GAME_API_BASE ?? 'http://localhost:5108/game'
+const API = process.env.NEXT_PUBLIC_GAME_API_BASE ?? 'http://10.133.51.123:5108/game' //http://localhost:5108/game
+
 
 type Move = { name: string; damage_class: string | null }
 type Poke = { id: number; name: string; currentHp: number; maxHp: number; fainted: boolean; sprites?: { front_default?: string }; moveset: Move[] }
